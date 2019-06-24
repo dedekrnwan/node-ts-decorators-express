@@ -1,6 +1,6 @@
 
 import * as express from "express";
-  
+import { IRoutes } from "./../interfaces";
 export const Controller = (prefix:string):ClassDecorator => {
     return (target:any):void => {
         const metakey:any = {
@@ -11,7 +11,7 @@ export const Controller = (prefix:string):ClassDecorator => {
         prefix = Reflect.getMetadata(metakey.prefix,target)
         //routes
         if(!Reflect.hasMetadata(metakey.routes,target)){
-            Reflect.defineMetadata(metakey.routes,express.Router(),target)
+            Reflect.defineMetadata(metakey.routes, [] ,target)
         }
     }
 }

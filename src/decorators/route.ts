@@ -10,7 +10,7 @@ export const Route = (options:any) => {
         }
         //declaring routes
         if(!Reflect.hasMetadata(metakey.routes, target.constructor)){
-            Reflect.defineMetadata(metakey.routes, <IRoutes> {}, target.constructor)
+            Reflect.defineMetadata(metakey.routes, [], target.constructor)
         }
         const routes = Reflect.getMetadata(metakey.routes, target.constructor);
         
