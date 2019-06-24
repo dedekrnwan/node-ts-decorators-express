@@ -1,13 +1,10 @@
 {
   "name": "@dedekrnwan/decorators-express",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Decorators for express project",
-  "main": "index.js",
+  "main": "./index.ts",
   "scripts": {
-    "build": "rm -rf ./bin/* && tsc",
-    "start": "node ./bin/index.js",
-    "dev": "ts-node ./lib/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf ./lib/* && tsc"
   },
   "keywords": [
     "decorators",
@@ -19,7 +16,7 @@
     "route"
   ],
   "author": "Dede kurniawan",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "reflect-metadata": "^0.1.13",
@@ -27,6 +24,7 @@
     "typescript": "^3.5.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.0"
+    "@types/express": "^4.17.0",
+    "@types/node": "^12.0.10"
   }
 }
