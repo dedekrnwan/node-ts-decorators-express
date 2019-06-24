@@ -39,7 +39,6 @@ class WelcomeController {
         path: '/testing',
         method: 'get'
     })
-    // @Middleware.before(new Jwt().authenticated)
     testing = async (request:express.Request, response:express.Response, next:express.NextFunction):Promise<any> => {
         try {
             next(new HResponse().ok(`Mantab testing path`,{}))
