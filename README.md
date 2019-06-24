@@ -14,26 +14,20 @@ Here's example of usage with Express framework. It uses TypeScript and `@dedekrn
 `Controller`
 
 ```typescript
-// import Controller from "./../../../vendor/controller";
 import * as express from "express";
 import hException from "./../../helper/exception.helper";
 import HResponse from "./../../helper/response.helper";
 
-import  { Controller } from "./../../../vendor/decorators/controller.decorator";
-import { Routes } from "./../../../vendor/decorators/routes.decorator";
-import { Middleware } from "./../../../vendor/decorators/middleware.decorator";
-import { Root } from "../../../vendor/decorators/root.decorator";
-
-import {IRoutes} from "./../../../vendor/interfaces/routes.interface";
-
 import { Jwt } from "./../../middleware/auth.middleware";
+
+import { Controller, RouteMiddleware, Root, Route, IRoutes, IMiddlewares } from "@dedekrnwan/decorators-express";
 
 @Controller('/welcome')
 class WelcomeController {
     constructor(){
     }
     @Root()
-    @Middleware.before(new Jwt().authenticated)
+    @RouteMiddleware.before(new Jwt().authenticated)
     index = async (request:express.Request, response:express.Response, next:express.NextFunction):Promise<any> => {
         try {
             next(new HResponse().ok(`Mantab`,{}))
@@ -41,7 +35,7 @@ class WelcomeController {
             next(new hException(error))
         }
     }
-    @Routes(<IRoutes> {
+    @Route(<IRoutes> {
         path: '/testing',
         method: 'get'
     })
