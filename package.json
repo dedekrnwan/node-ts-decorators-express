@@ -2,7 +2,8 @@
   "name": "@dedekrnwan/decorators-express",
   "version": "1.0.7",
   "description": "Decorators for express project",
-  "main": "./index.ts",
+  "main": "./lib/index.js",
+  "types": "./src/index.ts",
   "scripts": {
     "build": "rm -rf ./lib/* && tsc"
   },
