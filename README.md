@@ -53,78 +53,61 @@ export default WelcomeController
 
 `Express App`
 ```typescript
-import "reflect-metadata";
 import * as express from "express";
-import cServer from "./../app/config/server.config";
-import Error from "./../app/interfaces/error.interface";
-import Database from "./../app/services/database.service";
-import { default as Middleware } from "./../app/middleware";
-import { Attach } from "@dedekrnwan/decorators-express";
-
-import { default as WelcomeController } from "./../app/controller/api/welcome.controller";
-
-import * as hbs from "express-handlebars";
 import * as path from "path";
 
+import * as Config from "./../app/config";
+
+import { Database } from "./../app/services";
+import { Error } from "./../app/interfaces";
+
+
+import { RouteMiddleware, Attach, IRoutes, IMiddlewares } from "@dedekrnwan/decorators-express";
+import * as Middlewares from "./../app/middleware";
+import * as Controllers from "./../app/controller"
+
 class App {
-    public app:express.Application
+    app:express.Application
     constructor(){
         this.app = express()
-        this.app = Middleware.before(this.app);
-        this.app = Attach.Controller(this.app, [
-            //array of controller
-            WelcomeController
-        ],'/api')
-        this.app = Middleware.error(this.app);
-        this.app = Middleware.after(this.app);
+        this.middlewares()
+    }
+    middlewares = async () => {
+        try {
+            this.app = await Middlewares.before(this.app);
 
-        this.static()
-        this.view()
-        this.database()
+            Attach.Controller(this.app,[
+                Controllers.WelcomeController,
+                Controllers.AuthController,
+            ]).then((app) => {
+                this.app = app;
+            }).catch((error) => {
+                throw error;
+            })
+    
+            this.app =  await Middlewares.error(this.app);
+            this.app =  await Middlewares.after(this.app);
+        } catch (error) {
+            throw error
+        }
     }
-    static = () => {
-        this.app.use('/public',express.static(path.join(__dirname, './../public/')));
-        this.app.use('/vendor',express.static(path.join(__dirname, './../vendor/')));
+    run = async (port:number) => {
+        try {
+            this.app.listen(port, () => {
+                console.log(`${Config.Server.name} listening on the port ${port}`)
+            }).on('error' , async (err:Error) => {
+                let another_port = [8080, 80, 3000, 4000, 5000]; 
+                let next = another_port[Math.floor(Math.random() * another_port.length)];
+                if(err.code == 'EADDRINUSE')
+                    console.error(`${Config.Server.name} failed listening on the port ${err['port']}`)
+                    console.log(`${Config.Server.name} try listening on the port ${next}`)
+                    await this.run(next)
+            })
+        } catch (error) {
+            throw error;
+        }
     }
-    database = () => {
-        const db = new Database();
-        db.fractal();
-    }
-    view = () => {
-        this.app.engine('hbs', hbs(
-            {
-                extname: '.hbs',
-                defaultLayout: 'app',
-                layoutsDir: path.join(__dirname, "./../app/views/layouts/"),
-                partialsDir: path.join(__dirname, "./../app/views/includes/"),
-                helpers: {
-                    asset: (value:any):string => {
-                        return `./../public/assets/${value}`;
-                    },
-                    public: (value:any):string => {
-                        return `./../public/${value}`;
-                    }
-                }
-            }
-        ));
-        this.app.set('views',path.join(__dirname, "./../app/views/pages/"))
-        this.app.set('view engine','hbs')
-      
-    }
-    run = (port:number) => {
-        this.app.listen(port, () => {
-            console.log(`${cServer.name} listening on the port ${port}`)
-        }).on('error' , (err:Error) => {
-            let another_port = [8080, 80, 3000, 4000, 5000]; 
-            let next = another_port[Math.floor(Math.random() * another_port.length)];
-            if(err.code == 'EADDRINUSE')
-                console.error(`${cServer.name} failed listening on the port ${err['port']}`)
-                console.log(`${cServer.name} try listening on the port ${next}`)
-                this.run(next)
-
-        })
-    }
-} 
+}
 
 export default App
 ```
