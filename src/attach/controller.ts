@@ -21,13 +21,13 @@ export default async (app:express.Application, controllers:Array<any> , uses:str
                         error: []
                     };
                     let handler:express.RequestHandler= await <express.RequestHandler> instance[route.function];
-                    router.route(`${route.path}`)[route.method]([...middlewares.before, handler, ...middlewares.after, ...middlewares.error]) 
-                    app.use(`${uses}${prefix}`, router);
+                    await router.route(`${route.path}`)[route.method]([...middlewares.before, handler, ...middlewares.after, ...middlewares.error]) 
+                    await app.use(`${uses}${prefix}`, router);
                 });
             })
-            await resolve(app);
+            resolve(app);
        } catch (error) {
-            await  reject(error);
+            reject(error);
        }
     })
 }

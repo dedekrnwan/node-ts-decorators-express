@@ -1,7 +1,7 @@
 import * as express from "express";
 import { IMiddlewares, IRoutes } from "../interfaces";
 
-export const Route = (options:any) => {
+export const Route = (options:IRoutes) => {
     return (target:any, propertyKey:string):void => {
         const metakey:any = {
             routes: `${target.constructor.name}:routes`,
