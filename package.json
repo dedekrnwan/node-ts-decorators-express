@@ -1,6 +1,6 @@
 {
   "name": "@dedekrnwan/decorators-express",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Decorators for express project",
   "main": "./lib/index.js",
   "types": "./src/index.ts",

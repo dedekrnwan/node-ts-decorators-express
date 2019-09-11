@@ -1,8 +1,8 @@
 import * as express from "express";
 import { IMiddlewares,IRoutes } from "../interfaces";
 
-export default async (app:express.Application, controllers:Array<any> , uses:string=''):Promise<any> => { 
-    return await new Promise(async (resolve, reject) => {
+export default (app:express.Application, controllers:Array<any> , uses:string=''):Promise<any> => { 
+    return new Promise(async (resolve, reject) => {
        try {
             await controllers.forEach( async(controller:any) => {
                 let metakey:any = {
