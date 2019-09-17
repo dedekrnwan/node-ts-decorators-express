@@ -22,7 +22,9 @@ export const Route = (options:IRoutes) => {
         Reflect.defineMetadata(metakey.routes, routes , target.constructor);
     }
 }
-export const Root = (method: 'get' | 'post' | 'patch' | 'put' | 'delete' = 'get') => {
+export const Root = (method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'checkout' | 'copy' | 'delete' | 'get' | 'head'
+| 'lock' | 'merge' | 'mkactivity' | 'mkcol' | 'move' | 'm-search' | 'notify' | 'options' | 'purge' | 'report' | 'search'
+| 'subscribe' | 'trace' | 'unlock' | 'unsubscribe') => {
     return (target:any, propertyKey:string):void => {
         const metakey:any = {
             routes: `${target.constructor.name}:routes`,
