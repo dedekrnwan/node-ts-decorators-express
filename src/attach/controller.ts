@@ -4,7 +4,7 @@ import { IMiddlewares,IRoutes } from "../interfaces";
 export default (app:express.Application, controllers:Array<any> , uses:string=''):Promise<any> => { 
     return new Promise(async (resolve, reject) => {
        try {
-            await controllers.forEach( async(controller:any) => {
+            await asyncForEach(controllers, async (controller:any) => {
                 let metakey:any = {
                     routes: `${controller.name}:routes`,
                     prefix: `${controller.name}:prefix`,
@@ -30,4 +30,10 @@ export default (app:express.Application, controllers:Array<any> , uses:string=''
             reject(error);
        }
     })
+}
+
+async function asyncForEach(array:Array<any>, callback:any) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
 }
