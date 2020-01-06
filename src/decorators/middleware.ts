@@ -73,7 +73,7 @@ export const RouteMiddleware = {
         }
     },
 }
-export const ClassMiddleware = {
+export const ControllerMiddleware = {
     before:  (middleware:Function | Array<Function>):ClassDecorator => {
         return (target:any):void => {
             const metakey:any = {
@@ -144,39 +144,4 @@ export const ClassMiddleware = {
             Reflect.defineMetadata(metakey.middlewares, middlewares, target);
         }
     },
-    error:  (middleware:Function | Array<Function>):ClassDecorator => {
-        return (target:any):void => {
-            const metakey:any = {
-                routes: `${target.constructor.name}:routes`,
-                prefix: `${target.constructor.name}:prefix`,
-                middlewares: `${target.constructor.name}:middlewares`,
-            }
-            let handlers:Array<Function>;
-            //declaring middlewares
-            if(!Reflect.hasMetadata(metakey.middlewares, target)){
-                Reflect.defineMetadata(metakey.middlewares, <IMiddlewares> {
-                    before: [],
-                    after: [],
-                    error: [],
-                } ,target);
-            }
-            let middlewares = Reflect.getMetadata(metakey.middlewares,target)
-            switch (typeof middleware) {
-                case 'function':
-                    middlewares.error.push(middleware)
-                    break;
-                case 'object':
-                    middleware.forEach(func => {
-                        middlewares.error.push(func)
-                    });
-                    break;
-                default:
-                    //as function
-                    middlewares.error.push(middleware)
-                    break;
-            }
-            //after adding middleware to current property object as metadata
-            Reflect.defineMetadata(metakey.middlewares, middlewares, target);
-        }
-    }
 }

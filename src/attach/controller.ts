@@ -13,6 +13,7 @@ export default (app:express.Application, controllers:Array<any> , uses:string=''
                 const instance = await new controller();
                 const prefix = await Reflect.getMetadata(metakey.prefix, controller);
                 const routes:Array<IRoutes> = await Reflect.getMetadata(metakey.routes, controller);
+                const controllerMiddlewares:IMiddlewares = await Reflect.getMetadata(metakey.middlewares, controller);
                 const router:any = await  express.Router(); 
                 routes.forEach(async (route:any) => {
                     let middlewares:IMiddlewares = await  Reflect.getMetadata(metakey.middlewares, controller, route.function) || <IMiddlewares> {
@@ -21,7 +22,7 @@ export default (app:express.Application, controllers:Array<any> , uses:string=''
                         error: []
                     };
                     let handler:express.RequestHandler= await <express.RequestHandler> instance[route.function];
-                    await router.route(`${route.path}`)[route.method]([...middlewares.before, handler, ...middlewares.after, ...middlewares.error]) 
+                    await router.route(`${route.path}`)[route.method]([...controllerMiddlewares.before,...middlewares.before, handler, ...middlewares.after,...controllerMiddlewares.after]) 
                     await app.use(`${uses}${prefix}`, router);
                 });
             })
