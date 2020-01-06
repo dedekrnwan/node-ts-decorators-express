@@ -77,9 +77,9 @@ export const ControllerMiddleware = {
     before:  (middleware:Function | Array<Function>):ClassDecorator => {
         return (target:any):void => {
             const metakey:any = {
-                routes: `${target.constructor.name}:routes`,
-                prefix: `${target.constructor.name}:prefix`,
-                middlewares: `${target.constructor.name}:middlewares`,
+                routes: `${target.name}:routes`,
+                prefix: `${target.name}:prefix`,
+                middlewares: `${target.name}:middlewares`,
             }
             let handlers:Array<Function>;
             //declaring middlewares
@@ -112,9 +112,9 @@ export const ControllerMiddleware = {
     after:  (middleware:Function | Array<Function>):ClassDecorator => {
         return (target:any):void => {
             const metakey:any = {
-                routes: `${target.constructor.name}:routes`,
-                prefix: `${target.constructor.name}:prefix`,
-                middlewares: `${target.constructor.name}:middlewares`,
+                routes: `${target.name}:routes`,
+                prefix: `${target.name}:prefix`,
+                middlewares: `${target.name}:middlewares`,
             }
             let handlers:Array<Function>;
             //declaring middlewares
