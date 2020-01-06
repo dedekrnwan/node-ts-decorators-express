@@ -13,7 +13,11 @@ export default (app:express.Application, controllers:Array<any> , uses:string=''
                 const instance = await new controller();
                 const prefix = await Reflect.getMetadata(metakey.prefix, controller);
                 const routes:Array<IRoutes> = await Reflect.getMetadata(metakey.routes, controller);
-                const controllerMiddlewares:IMiddlewares = await Reflect.getMetadata(metakey.middlewares, controller);
+                const controllerMiddlewares:IMiddlewares = await Reflect.getMetadata(metakey.middlewares, controller) || <IMiddlewares> {
+                    before: [],
+                    after: [],
+                    error: []
+                };
                 const router:any = await  express.Router(); 
                 routes.forEach(async (route:any) => {
                     let middlewares:IMiddlewares = await  Reflect.getMetadata(metakey.middlewares, controller, route.function) || <IMiddlewares> {
